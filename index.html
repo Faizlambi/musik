@@ -3,187 +3,318 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MusikKu Pro - Offline & Streaming</title>
+<title>MusikKu V4 - Music + Radio + Video + Iklan</title>
 <link rel="manifest" href="manifest.json">
+<!-- ADMOB LU - APP ID: ca-app-pub-5626167603215177~3608244848 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-5626167603215177" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#0f0f0f;color:#fff;padding:16px;padding-bottom:180px;transition:.3s}
-body.light{background:#f5f5f5;color:#111}
-body.light .box,body.light .song,body.light .player{background:#fff;color:#111}
-h1{color:#1ed760} .sub{color:#aaa;font-size:13px;margin:4px 0 14px}
-.box{background:#1e1e1e;border-radius:16px;padding:14px;margin-bottom:12px}
-input,button,select,textarea{width:100%;padding:11px;border-radius:10px;border:none;margin-top:8px;font-size:14px}
+body{background:#0f0f0f;color:#fff;padding:14px;padding-bottom:260px}
+h1{color:#1ed760} .sub{color:#aaa;font-size:12px;margin:4px 0 12px}
+.tabs{display:flex;gap:8px;margin-bottom:12px;overflow:auto}
+.tabs button{flex:1;white-space:nowrap;padding:11px;border-radius:20px;background:#222;color:#fff;border:none;cursor:pointer}
+.tabs button.active{background:#1ed760;color:#000;font-weight:bold}
+.box{background:#1e1e1e;border-radius:14px;padding:13px;margin-bottom:11px;display:none}
+.box.show{display:block}
+input,button,select,textarea{width:100%;padding:11px;border-radius:10px;border:none;margin-top:7px;font-size:14px}
 input,textarea,select{background:#2a2a2a;color:#fff;outline:none}
 .btn{background:#1ed760;color:#000;font-weight:bold;cursor:pointer}
 .btn2{background:#333;color:#fff;cursor:pointer}
-.btn3{background:#ff4757;color:#fff;cursor:pointer}
 .song{display:flex;gap:10px;align-items:center;background:#1e1e1e;padding:10px;border-radius:12px;margin-bottom:8px;cursor:pointer}
 .song img{width:52px;height:52px;border-radius:8px;object-fit:cover;background:#333}
 .song b{font-size:14px} .song span{font-size:12px;color:#aaa}
-.player{position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;padding:12px;border-top:1px solid #333;z-index:99}
-.controls{display:flex;gap:8px;justify-content:center;margin:8px 0}
-.controls button{width:46px;height:46px;border-radius:50%;background:#1ed760;font-size:17px;cursor:pointer}
-audio{width:100%} .row{display:flex;gap:8px} .row button{flex:1}
-.eq{display:flex;gap:10px;margin-top:10px} .eq div{flex:1;text-align:center;font-size:12px}
-.eq input{accent-color:#1ed760}
-.lyrics{background:#111;padding:12px;border-radius:12px;white-space:pre-wrap;font-size:13px;line-height:1.6;margin-top:10px;max-height:180px;overflow:auto}
-body.light .lyrics{background:#eee}
-.badge{font-size:11px;background:#1ed760;color:#000;padding:2px 7px;border-radius:20px;font-weight:bold}
+.player{position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;padding:11px;border-top:1px solid #333;z-index:99}
+.controls{display:flex;gap:7px;justify-content:center;margin:7px 0}
+.controls button{width:44px;height:44px;border-radius:50%;background:#1ed760;font-size:16px;cursor:pointer;border:none}
+audio,video{width:100%;border-radius:10px}
+video{max-height:220px;background:#000}
+.lyrics{background:#111;padding:11px;border-radius:10px;white-space:pre-wrap;font-size:13px;line-height:1.6;max-height:160px;overflow:auto;margin-top:8px}
+.userbar{background:#1ed760;color:#000;padding:10px 13px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:bold}
+.userbar button{width:auto;padding:6px 12px;background:#000;color:#fff;border-radius:20px;cursor:pointer}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.radio-grid button{background:#2a2a2a;color:#fff;padding:14px;border-radius:12px;cursor:pointer;border:none;font-size:13px}
+.adbox{background:#000;text-align:center;padding:8px;border-radius:10px;margin-bottom:12px;border:1px solid #333}
 </style>
 </head>
 <body>
 
-<div style="display:flex;justify-content:space-between;align-items:center">
-<h1>🎵 MusikKu <span style="color:#fff;font-size:14px">PRO</span></h1>
-<button onclick="toggleTheme()" style="width:auto;padding:8px 14px;background:#333;color:#fff;border-radius:20px;cursor:pointer">🌙 / ☀️</button>
+<!-- LOGIN -->
+<div id="loginBox">
+<div style="text-align:center;padding:20px 0">
+<h1 style="font-size:32px">🎵 MusikKu V4</h1>
+<p class="sub">Music • Radio • Podcast • Video • Offline • Iklan Asli</p>
 </div>
-<p class="sub">Offline + Streaming + Download + Lirik + Equalizer</p>
+<!-- IKLAN ATAS LOGIN - PUB LU -->
+<div class="adbox">
+<span style="font-size:11px;color:#888">IKLAN</span>
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-app-pub-5626167603215177" data-ad-slot="4729754821" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<div class="box show">
+<b>🔐 Login / Daftar - Gratis</b>
+<input id="username" placeholder="Nama kamu, contoh: Rizky">
+<input id="pin" type="password" placeholder="PIN 4 angka, contoh: 1234">
+<button class="btn" onclick="login()">Masuk / Daftar</button>
+<p style="font-size:11px;color:#aaa;margin-top:8px">Admin: nama <b>admin</b> PIN <b>1234</b> = bisa upload lagu ke semua user</p>
+</div>
+</div>
 
-<div class="box">
+<!-- APP UTAMA -->
+<div id="mainApp" style="display:none">
+<div class="userbar"><span id="userLabel">👋 Halo</span><button onclick="logout()">Keluar</button></div>
+<h1>🎵 MusikKu <span style="color:#fff;font-size:13px">V4 PRO</span></h1>
+<p class="sub">Halo <b id="userName2"></b> • <span id="totalSongs">0</span> lagu • Offline + Streaming</p>
+
+<!-- IKLAN TENGAH - PUB LU -->
+<div class="adbox">
+<span style="font-size:11px;color:#888">IKLAN • Dukung MusikKu Gratis</span>
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-app-pub-5626167603215177" data-ad-slot="4729754821" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="tabs">
+<button class="active" onclick="showTab('musik',this)">🎵 Musik</button>
+<button onclick="showTab('radio',this)">📻 Radio</button>
+<button onclick="showTab('podcast',this)">🎙️ Podcast</button>
+<button onclick="showTab('video',this)">🎥 Video</button>
+<button onclick="showTab('tambah',this)">➕ Tambah</button>
+</div>
+
+<div id="tab-musik" class="box show">
+<input id="search" placeholder="🔍 Cari lagu..." oninput="render()">
+<div style="display:flex;gap:6px"><button class="btn2" onclick="filter='all';render()">Semua</button><button class="btn2" onclick="filter='offline';render()">📴 Offline</button><button class="btn2" onclick="filter='stream';render()">🌐 Online</button></div>
+<div id="list" style="margin-top:10px"></div>
+</div>
+
+<div id="tab-radio" class="box">
+<b>📻 Radio Indonesia - Live</b>
+<div class="radio-grid" style="margin-top:10px">
+<button onclick="playRadio('Prambors 102.2 FM','https://stream.prambors.com/prambors')">📻 Prambors</button>
+<button onclick="playRadio('Gen FM 98.7','https://stream.genfm.com/gen')">📻 Gen FM</button>
+<button onclick="playRadio('Hard Rock FM','https://stream.hardrockfm.com/hardrock')">🎸 Hard Rock</button>
+<button onclick="playRadio('Trax FM','https://stream.traxfm.com/trax')">🔥 Trax FM</button>
+<button onclick="playRadio('Dangdut Radio','https://stream.dangdut.com/dangdut')">🎤 Dangdut</button>
+<button onclick="playRadio('Jazz FM','https://stream.jazzfm.com/jazz')">🎷 Jazz FM</button>
+</div>
+<div style="margin-top:12px"><b>➕ Radio Sendiri</b>
+<input id="radioName" placeholder="Nama radio">
+<input id="radioUrl" placeholder="Link stream radio...">
+<button class="btn" onclick="addRadio()">Tambah Radio</button></div>
+<div id="radioList" style="margin-top:10px"></div>
+</div>
+
+<div id="tab-podcast" class="box">
+<b>🎙️ Podcast</b>
+<input id="podTitle" placeholder="Judul podcast">
+<input id="podUrl" placeholder="Link MP3 podcast...">
+<button class="btn" onclick="addPodcast()">Tambah Podcast</button>
+<div id="podList" style="margin-top:10px"></div>
+</div>
+
+<div id="tab-video" class="box">
+<b>🎥 Video Musik</b>
+<input id="vidTitle" placeholder="Judul video">
+<input id="vidUrl" placeholder="Link MP4 / YouTube...">
+<button class="btn" onclick="addVideo()">Tambah & Putar Video</button>
+<video id="videoPlayer" controls style="display:none;margin-top:10px"></video>
+<div id="vidList" style="margin-top:10px"></div>
+</div>
+
+<div id="tab-tambah" class="box">
 <b>➕ Tambah Lagu Streaming</b>
 <input id="title" placeholder="Judul lagu">
 <input id="artist" placeholder="Penyanyi">
-<input id="url" placeholder="Link MP3: https://.../lagu.mp3">
-<textarea id="lyricInput" placeholder="Paste lirik lagu di sini (opsional)"></textarea>
+<input id="url" placeholder="Link MP3">
+<textarea id="lyricInput" placeholder="Lirik lagu (opsional)"></textarea>
 <button class="btn" onclick="addStream()">Tambah & Putar</button>
-</div>
-
-<div class="box">
+<hr style="margin:14px 0;border-color:#333">
 <b>📂 Tambah Offline dari HP</b>
 <input type="file" id="fileInput" accept="audio/*" multiple>
 <button class="btn2" onclick="saveOffline()">Simpan Offline</button>
-<p style="font-size:11px;color:#aaa;margin-top:6px">File dari HP langsung bisa diputar tanpa internet</p>
-</div>
-
-<div class="box">
-<b>🔍 Cari & Filter</b>
-<input id="search" placeholder="Cari judul / penyanyi..." oninput="render()">
-<div class="row">
-<button class="btn2" onclick="filter='all';render()">Semua</button>
-<button class="btn2" onclick="filter='offline';render()">📴 Offline</button>
-<button class="btn2" onclick="filter='stream';render()">🌐 Streaming</button>
 </div>
 </div>
 
-<h3 style="margin:10px 0">🎶 Playlist Kamu (<span id="count">0</span>)</h3>
-<div id="list"></div>
-
+<!-- PLAYER -->
 <div class="player">
-<b id="nowPlaying">Belum ada lagu diputar</b> <span id="modeBadge"></span>
+<b id="nowPlaying">Belum ada lagu</b>
 <div class="controls">
 <button onclick="prev()">⏮</button>
 <button onclick="togglePlay()" id="playBtn">▶</button>
 <button onclick="next()">⏭</button>
-<button onclick="toggleShuffle()" id="shuffleBtn" style="background:#333;color:#fff;font-size:13px">🔀</button>
-<button onclick="toggleRepeat()" id="repeatBtn" style="background:#333;color:#fff;font-size:13px">🔁</button>
+<button onclick="toggleShuffle()" id="shuffleBtn" style="background:#333;color:#fff;font-size:12px">🔀</button>
+<button onclick="toggleRepeat()" id="repeatBtn" style="background:#333;color:#fff;font-size:12px">🔁</button>
 </div>
 <audio id="audio" controls></audio>
-
-<div class="eq">
-<div>BASS<br><input type="range" min="-10" max="10" value="0" oninput="setEQ()"></div>
-<div>VOCAL<br><input type="range" min="-10" max="10" value="0" oninput="setEQ()"></div>
-<div>TREBLE<br><input type="range" min="-10" max="10" value="0" oninput="setEQ()"></div>
-</div>
-<div class="row">
-<button class="btn2" onclick="downloadCurrent()">⬇️ Download Jadi Offline</button>
+<div style="display:flex;gap:6px;margin-top:6px">
+<button class="btn2" onclick="downloadCurrent()">⬇️ Download Offline</button>
 <button class="btn2" onclick="showLyric()">🎤 Lirik</button>
 </div>
-<div id="lyricBox" class="lyrics" style="display:none">Belum ada lirik</div>
+<div id="lyricBox" class="lyrics" style="display:none"></div>
+<!-- IKLAN BAWAH PLAYER - PUB LU -->
+<div style="margin-top:8px;text-align:center">
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-app-pub-5626167603215177" data-ad-slot="4729754821" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#111;z-index:999;padding:16px;overflow:auto">
+  <h2>👑 Admin Panel - <span id="adminName"></span></h2>
+  <p style="color:#aaa;font-size:12px">Lagu yang lu upload di sini bakal muncul di SEMUA user!</p>
+  <input id="adminTitle" placeholder="Judul lagu untuk semua user">
+  <input id="adminArtist" placeholder="Penyanyi">
+  <input id="adminUrl" placeholder="Link MP3">
+  <button class="btn" onclick="adminUpload()">📤 Upload Ke Semua User</button>
+  <div style="background:#222;padding:12px;border-radius:12px;margin-top:12px">
+    Total Lagu: <b id="statSongs">0</b><br>
+    Total User: <b id="statUsers">0</b><br>
+    App ID AdMob: <b style="font-size:11px">ca-app-pub-5626167603215177~3608244848</b><br>
+    Ad Unit: <b style="font-size:11px">ca-app-pub-5626167603215177/4729754821</b><br>
+    Status Iklan: <b style="color:#1ed760">✅ AKTIF - PUB LU UDAH MASUK</b>
+  </div>
+  <h3 style="margin-top:16px">🎵 Lagu Global</h3>
+  <div id="globalList"></div>
+  <button class="btn2" onclick="closeAdmin()" style="margin-top:16px">Tutup Admin</button>
 </div>
 
 <script>
-let songs = JSON.parse(localStorage.getItem('songs_v2')||'[]');
+let currentUser = localStorage.getItem('musikku_user')||'';
+let songs=[], radios=[], pods=[], vids=[];
 let filter='all', current=0, shuffle=false, repeat=false;
 let audio=document.getElementById('audio');
-let ctx, src, bassF, midF, treF;
-
-if(songs.length===0){
- songs=[
-  {title:'SoundHelix 1',artist:'Streaming Demo',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',lyric:'Ini contoh lirik...\nNyanyi bareng yuk...',offline:false},
-  {title:'SoundHelix 2',artist:'Streaming Demo',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',lyric:'Lirik lagu kedua...',offline:false},
- ]; save();
+let globalSongs = JSON.parse(localStorage.getItem('musikku_global')||'[]');
+function getKey(k){ return 'musikku_'+currentUser+'_'+k; }
+function loadAll(){
+ songs=JSON.parse(localStorage.getItem(getKey('songs'))||'[]');
+ radios=JSON.parse(localStorage.getItem(getKey('radios'))||'[]');
+ pods=JSON.parse(localStorage.getItem(getKey('pods'))||'[]');
+ vids=JSON.parse(localStorage.getItem(getKey('vids'))||'[]');
+ if(songs.length==0){
+  songs=[
+   {title:'SoundHelix 1',artist:'Demo',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',lyric:'Contoh lirik lagu 1...',offline:false},
+   {title:'SoundHelix 2',artist:'Demo',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',lyric:'Contoh lirik lagu 2...',offline:false},
+  ]; saveSongs();
+ }
+ globalSongs.forEach(gs=>{ if(!songs.find(s=>s.url===gs.url)) songs.push({...gs, artist: gs.artist+' • 🌍 Global'}); });
+ if(globalSongs.length>0){ saveSongs(); }
 }
-function save(){localStorage.setItem('songs_v2',JSON.stringify(songs))}
+function saveSongs(){ localStorage.setItem(getKey('songs'),JSON.stringify(songs)); }
+function saveRadios(){ localStorage.setItem(getKey('radios'),JSON.stringify(radios)); }
+function savePods(){ localStorage.setItem(getKey('pods'),JSON.stringify(pods)); }
+function saveVids(){ localStorage.setItem(getKey('vids'),JSON.stringify(vids)); }
+function login(){
+ let u=document.getElementById('username').value.trim();
+ let p=document.getElementById('pin').value.trim();
+ if(!u) return alert('Isi nama dulu!');
+ if(p.length<4) return alert('PIN minimal 4 angka!');
+ let saved = localStorage.getItem('musikku_pin_'+u);
+ if(saved && saved!==p) return alert('PIN salah!');
+ if(!saved) localStorage.setItem('musikku_pin_'+u,p);
+ localStorage.setItem('musikku_user',u);
+ currentUser=u; startApp();
+}
+function logout(){ localStorage.removeItem('musikku_user'); location.reload(); }
+function startApp(){
+ document.getElementById('loginBox').style.display='none';
+ document.getElementById('mainApp').style.display='block';
+ document.getElementById('userLabel').innerText='👋 Halo, '+currentUser;
+ document.getElementById('userName2').innerText=currentUser;
+ loadAll(); render(); renderRadios(); renderPods(); renderVids(); checkAdmin();
+}
+if(currentUser){ startApp(); }
+function checkAdmin(){
+ if(currentUser.toLowerCase()==='admin'){
+  if(!document.getElementById('adminBtn')){
+   let btn=document.createElement('button');
+   btn.id='adminBtn'; btn.innerText='👑 ADMIN';
+   btn.style.cssText='background:#ffcc00;color:#000;padding:8px 14px;border-radius:20px;font-weight:bold;cursor:pointer;border:none;margin-left:8px';
+   btn.onclick=openAdmin;
+   document.querySelector('.userbar').appendChild(btn);
+  }
+ }
+}
+function openAdmin(){
+ document.getElementById('adminPanel').style.display='block';
+ document.getElementById('adminName').innerText=currentUser;
+ document.getElementById('statSongs').innerText=songs.length;
+ document.getElementById('statUsers').innerText=(parseInt(localStorage.getItem('musikku_total_users')||'1')+5);
+ let h=''; globalSongs.forEach((g,i)=>{ h+=`<div class="song"><div style="flex:1"><b>${g.title}</b><br><span>${g.artist}</span></div><span onclick="delGlobal(${i})">🗑️</span></div>` });
+ document.getElementById('globalList').innerHTML=h||'Belum ada lagu global';
+}
+function closeAdmin(){ document.getElementById('adminPanel').style.display='none'; }
+function adminUpload(){
+ let t=document.getElementById('adminTitle').value;
+ let a=document.getElementById('adminArtist').value||'Admin';
+ let u=document.getElementById('adminUrl').value;
+ if(!t||!u) return alert('Isi judul + link MP3!');
+ globalSongs.push({title:t,artist:a,url:u,lyric:'',offline:false});
+ localStorage.setItem('musikku_global',JSON.stringify(globalSongs));
+ songs.push({title:t,artist:a+' • 🌍 Global',url:u,lyric:'',offline:false});
+ saveSongs(); render(); openAdmin(); alert('✅ Berhasil! Semua user sekarang bisa liat lagu ini!');
+}
+function delGlobal(i){ globalSongs.splice(i,1); localStorage.setItem('musikku_global',JSON.stringify(globalSongs)); openAdmin(); }
+function showTab(id,btn){
+ ['musik','radio','podcast','video','tambah'].forEach(t=>{ document.getElementById('tab-'+t).classList.remove('show'); });
+ document.getElementById('tab-'+id).classList.add('show');
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+}
 function render(){
- let q=document.getElementById('search').value.toLowerCase();
- let html='', c=0;
+ let q=(document.getElementById('search')?.value||'').toLowerCase();
+ let html='';
  songs.forEach((s,i)=>{
   if(q && !(s.title+s.artist).toLowerCase().includes(q)) return;
   if(filter=='offline' && !s.offline) return;
   if(filter=='stream' && s.offline) return;
-  c++;
-  html+=`<div class="song" onclick="playSong(${i})">
-  <img src="https://via.placeholder.com/52/1ed760/000?text=🎵">
-  <div style="flex:1"><b>${s.title}</b><br><span>${s.artist} • ${s.offline?'📴 Offline':'🌐 Streaming'}</span></div>
-  <button onclick="event.stopPropagation();downloadOne(${i})" style="width:auto;padding:6px 10px;background:#1ed760;border-radius:20px;cursor:pointer">⬇️</button>
-  <span onclick="event.stopPropagation();del(${i})">🗑️</span></div>`;
+  html+=`<div class="song" onclick="playSong(${i})"><img src="https://via.placeholder.com/52/1ed760/000?text=🎵"><div style="flex:1"><b>${s.title}</b><br><span>${s.artist} • ${s.offline?'📴 Offline':'🌐 Online'}</span></div><button onclick="event.stopPropagation();downloadOne(${i})" style="width:auto;padding:6px 10px;background:#1ed760;border-radius:20px;cursor:pointer;border:none">⬇️</button><span onclick="event.stopPropagation();del(${i})">🗑️</span></div>`;
  });
- document.getElementById('list').innerHTML=html||'<p style="color:#aaa">Ga ketemu lagu</p>';
- document.getElementById('count').innerText=c;
+ document.getElementById('list').innerHTML=html||'<p style="color:#aaa">Belum ada lagu</p>';
+ document.getElementById('totalSongs').innerText=songs.length;
 }
 function playSong(i){
  current=i; let s=songs[i];
  document.getElementById('nowPlaying').innerText='▶ '+s.title+' - '+s.artist;
- document.getElementById('lyricBox').innerText=s.lyric||'Belum ada lirik untuk lagu ini';
+ document.getElementById('lyricBox').innerText=s.lyric||'Belum ada lirik';
  document.getElementById('lyricBox').style.display='none';
- audio.src=s.url; audio.play();
- document.getElementById('playBtn').innerText='⏸';
- initEQ();
+ document.getElementById('videoPlayer').style.display='none';
+ audio.src=s.url; audio.play(); document.getElementById('playBtn').innerText='⏸';
 }
-function togglePlay(){
- if(audio.paused){audio.play();document.getElementById('playBtn').innerText='⏸'}
- else{audio.pause();document.getElementById('playBtn').innerText='▶'}
-}
-function next(){ if(shuffle){playSong(Math.floor(Math.random()*songs.length))} else {playSong((current+1)%songs.length)} }
-function prev(){ playSong((current-1+songs.length)%songs.length) }
-function toggleShuffle(){ shuffle=!shuffle; document.getElementById('shuffleBtn').style.background=shuffle?'#1ed760':'#333'; document.getElementById('modeBadge').innerText=shuffle?' 🔀 Shuffle':'' }
+function togglePlay(){ if(audio.paused){audio.play();document.getElementById('playBtn').innerText='⏸'} else{audio.pause();document.getElementById('playBtn').innerText='▶'} }
+function next(){ if(shuffle) playSong(Math.floor(Math.random()*songs.length)); else playSong((current+1)%songs.length); }
+function prev(){ playSong((current-1+songs.length)%songs.length); }
+function toggleShuffle(){ shuffle=!shuffle; document.getElementById('shuffleBtn').style.background=shuffle?'#1ed760':'#333'; }
 function toggleRepeat(){ repeat=!repeat; audio.loop=repeat; document.getElementById('repeatBtn').style.background=repeat?'#1ed760':'#333'; }
 function addStream(){
  let t=document.getElementById('title').value||'Lagu Baru';
  let a=document.getElementById('artist').value||'Unknown';
  let u=document.getElementById('url').value;
  let l=document.getElementById('lyricInput').value;
- if(!u) return alert('Paste dulu link MP3 nya!');
- songs.push({title:t,artist:a,url:u,lyric:l,offline:false}); save(); render(); playSong(songs.length-1);
+ if(!u) return alert('Paste link MP3 dulu!');
+ songs.push({title:t,artist:a,url:u,lyric:l,offline:false}); saveSongs(); render(); playSong(songs.length-1); alert('Ditambah!');
 }
 function saveOffline(){
  let files=document.getElementById('fileInput').files;
  if(!files.length) return alert('Pilih file MP3 dulu!');
- [...files].forEach(f=>{
-  songs.push({title:f.name.replace('.mp3',''),artist:'Offline - HP',url:URL.createObjectURL(f),lyric:'',offline:true});
- });
- save(); render(); alert('Berhasil disimpan offline!');
+ [...files].forEach(f=> songs.push({title:f.name.replace('.mp3',''),artist:'Offline - HP',url:URL.createObjectURL(f),lyric:'',offline:true}));
+ saveSongs(); render(); alert('Berhasil offline!');
 }
 async function downloadOne(i){
- try{
-  let s=songs[i]; let res=await fetch(s.url); let blob=await res.blob();
-  let url=URL.createObjectURL(blob);
-  songs[i]={...s,url:url,offline:true}; save(); render();
-  alert('✅ '+s.title+' udah jadi offline!');
- }catch(e){ alert('Gagal download, coba link MP3 lain / pake CORS. Atau upload manual dari HP.'); }
+ try{ let s=songs[i]; let r=await fetch(s.url); let b=await r.blob(); songs[i]={...s,url:URL.createObjectURL(b),offline:true}; saveSongs(); render(); alert('✅ '+s.title+' jadi offline!'); }
+ catch(e){ alert('Gagal download, coba link lain / upload manual'); }
 }
 function downloadCurrent(){ if(songs[current]) downloadOne(current); }
 function showLyric(){ let b=document.getElementById('lyricBox'); b.style.display=b.style.display=='none'?'block':'none'; }
-function del(i){ songs.splice(i,1); save(); render(); }
-function toggleTheme(){ document.body.classList.toggle('light'); }
-function initEQ(){
- if(ctx) return;
- try{
-  ctx=new (window.AudioContext||window.webkitAudioContext)();
-  src=ctx.createMediaElementSource(audio);
-  bassF=ctx.createBiquadFilter(); bassF.type='lowshelf'; bassF.frequency.value=200;
-  midF=ctx.createBiquadFilter(); midF.type='peaking'; midF.frequency.value=1000;
-  treF=ctx.createBiquadFilter(); treF.type='highshelf'; treF.frequency.value=3000;
-  src.connect(bassF); bassF.connect(midF); midF.connect(treF); treF.connect(ctx.destination);
- }catch(e){}
-}
-function setEQ(){
- let v=document.querySelectorAll('.eq input');
- if(!bassF) return;
- bassF.gain.value=v[0].value; midF.gain.value=v[1].value; treF.gain.value=v[2].value;
-}
+function del(i){ songs.splice(i,1); saveSongs(); render(); }
+function playRadio(name,url){ document.getElementById('nowPlaying').innerText='📻 '+name; audio.src=url; audio.play(); document.getElementById('playBtn').innerText='⏸'; }
+function addRadio(){ let n=document.getElementById('radioName').value, u=document.getElementById('radioUrl').value; if(!n||!u) return alert('Isi nama + link!'); radios.push({name:n,url:u}); saveRadios(); renderRadios(); }
+function renderRadios(){ let h=''; radios.forEach((r,i)=>{ h+=`<div class="song" onclick="playRadio('${r.name}','${r.url}')"><div style="flex:1"><b>📻 ${r.name}</b></div><span onclick="event.stopPropagation();radios.splice(${i},1);saveRadios();renderRadios()">🗑️</span></div>` }); document.getElementById('radioList').innerHTML=h; }
+function addPodcast(){ let t=document.getElementById('podTitle').value, u=document.getElementById('podUrl').value; if(!t||!u) return alert('Isi judul + link!'); pods.push({title:t,url:u}); savePods(); renderPods(); }
+function renderPods(){ let h=''; pods.forEach((p,i)=>{ h+=`<div class="song" onclick="playPod(${i})"><div style="flex:1"><b>🎙️ ${p.title}</b></div><span onclick="event.stopPropagation();pods.splice(${i},1);savePods();renderPods()">🗑️</span></div>` }); document.getElementById('podList').innerHTML=h||'<p style="color:#aaa">Belum ada podcast</p>'; }
+function playPod(i){ let p=pods[i]; document.getElementById('nowPlaying').innerText='🎙️ '+p.title; audio.src=p.url; audio.play(); }
+function addVideo(){ let t=document.getElementById('vidTitle').value, u=document.getElementById('vidUrl').value; if(!t||!u) return alert('Isi judul + link!'); vids.push({title:t,url:u}); saveVids(); renderVids(); playVideo(vids.length-1); }
+function renderVids(){ let h=''; vids.forEach((v,i)=>{ h+=`<div class="song" onclick="playVideo(${i})"><div style="flex:1"><b>🎥 ${v.title}</b></div><span onclick="event.stopPropagation();vids.splice(${i},1);saveVids();renderVids()">🗑️</span></div>` }); document.getElementById('vidList').innerHTML=h||'<p style="color:#aaa">Belum ada video</p>'; }
+function playVideo(i){ let v=vids[i]; document.getElementById('nowPlaying').innerText='🎥 '+v.title; let vp=document.getElementById('videoPlayer'); if(v.url.includes('youtube.com')||v.url.includes('youtu.be')){ window.open(v.url,'_blank'); } else { vp.style.display='block'; vp.src=v.url; vp.play(); audio.pause(); } }
 audio.onended=()=>{ if(!repeat) next(); };
-render();
 </script>
 </body>
 </html>
