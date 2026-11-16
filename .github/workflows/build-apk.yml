@@ -26,6 +26,12 @@ jobs:
           npx cap init "My Spotify" "com.myspotify.app" --web-dir www
           npx cap add android
 
+      - name: Tambahkan Izin Audio & Internet Android
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' $MANIFEST
+          sed -i 's/<uses-permission android:name="android.permission.INTERNET" \/>/<uses-permission android:name="android.permission.INTERNET" \/>\n    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" \/>\n    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" \/>/g' $MANIFEST
+
       - name: Rakit File APK
         run: |
           cd android
