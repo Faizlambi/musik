@@ -1,0 +1,46 @@
+name: Build APK MusikKu
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil Kodingan Website
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bikin Project APK dari Website
+        run: |
+          npm install -g @capacitor/cli
+          npm init -y
+          npm install @capacitor/core @capacitor/android
+          npx cap init MusikKu com.faizlambi.musikku --web-dir=.
+          npx cap add android
+          # Setting biar fullscreen, ga ada URL Bar
+          echo "android:usesCleartextTraffic=true" >> android/app/src/main/AndroidManifest.xml
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Simpan APK-nya
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusikKu-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
