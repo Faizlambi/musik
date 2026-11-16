@@ -10,7 +10,7 @@
     "@capacitor/core": "^6.0.0"
   }
 }
-        uses: actions/setup-node@v4
+  uses: actions/setup-node@v4
         with:
           node-version: 20
 
