@@ -1,46 +1,39 @@
-name: Build APK MusikKu
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+name: Build APK Android
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Ambil Kodingan Website
+      - name: Ambil Kode Repository
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Siapkan Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Siapkan Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Bikin Project APK dari Website
+      - name: Instal Capacitor & Siapkan Web
         run: |
-          npm install -g @capacitor/cli
-          npm init -y
-          npm install @capacitor/core @capacitor/android
-          npx cap init MusikKu com.faizlambi.musikku --web-dir=.
+          npm install
+          npm run build
+          npx cap init "My Spotify" "com.myspotify.app" --web-dir www
           npx cap add android
-          # Setting biar fullscreen, ga ada URL Bar
-          echo "android:usesCleartextTraffic=true" >> android/app/src/main/AndroidManifest.xml
 
-      - name: Build APK
+      - name: Rakit File APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug
 
-      - name: Simpan APK-nya
+      - name: Unggah Hasil APK
         uses: actions/upload-artifact@v4
         with:
-          name: MusikKu-APK
+          name: MySpotify-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
