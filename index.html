@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Offline & Online</title>
+    <title>My Spotify APK</title>
     <meta name="theme-color" content="#121212">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #121212; color: white; padding-bottom: 120px; }
+        body { background-color: #121212; color: white; padding-bottom: 130px; }
         
         header {
             background: linear-gradient(to bottom, #1db954, #121212);
@@ -26,24 +26,27 @@
             padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap;
         }
         .btn-scan {
-            background: #1db954; color: black; border: none; padding: 10px 16px;
+            background: #1db954; color: black; border: none; padding: 11px 16px;
             border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer;
-            display: flex; align-items: center; gap: 6px;
         }
         .btn-clear {
-            background: #282828; color: #ff6b6b; border: none; padding: 10px 14px;
+            background: #282828; color: #ff6b6b; border: none; padding: 11px 14px;
             border-radius: 20px; font-size: 12px; cursor: pointer;
         }
 
-        .search-box { padding: 5px 20px 15px; }
+        .search-box { padding: 5px 20px 12px; display: flex; gap: 8px; }
         .search-box input {
-            width: 100%; padding: 12px 15px; border-radius: 25px; border: none;
+            flex: 1; padding: 12px 15px; border-radius: 25px; border: none;
             background: #282828; color: white; font-size: 14px; outline: none;
         }
+        .search-box button {
+            background: #1db954; color: black; border: none; padding: 0 16px;
+            border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer;
+        }
 
-        .tabs { display: flex; padding: 0 20px 10px; gap: 10px; }
+        .tabs { display: flex; padding: 0 20px 12px; gap: 8px; }
         .tab {
-            padding: 6px 14px; border-radius: 15px; background: #282828;
+            padding: 7px 14px; border-radius: 15px; background: #282828;
             font-size: 12px; cursor: pointer; color: #b3b3b3;
         }
         .tab.active { background: #1db954; color: black; font-weight: bold; }
@@ -52,17 +55,17 @@
         .song-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 10px; border-radius: 8px; margin-bottom: 8px; cursor: pointer;
-            transition: background 0.2s;
+            background: #181818;
         }
-        .song-item:hover, .song-item.active { background: #282828; }
+        .song-item.active { background: #282828; border-left: 3px solid #1db954; }
         .song-left { display: flex; align-items: center; overflow: hidden; }
         .song-left img { width: 48px; height: 48px; border-radius: 6px; margin-right: 12px; object-fit: cover; flex-shrink: 0; }
         .song-info { overflow: hidden; }
         .song-info h4 { font-size: 14px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-info p { font-size: 12px; color: #b3b3b3; }
+        .song-info p { font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .song-item.active .song-info h4 { color: #1db954; }
         .tag-type {
-            font-size: 10px; padding: 2px 6px; border-radius: 4px;
+            font-size: 10px; padding: 3px 7px; border-radius: 4px;
             background: #333; color: #ccc; flex-shrink: 0; margin-left: 8px;
         }
 
@@ -92,26 +95,27 @@
     <header>
         <div>
             <h1>My Spotify</h1>
-            <p style="font-size: 12px; color: #ddd;">Online & Offline Player</p>
+            <p style="font-size: 12px; color: #ddd;">Online Streaming & Offline HP</p>
         </div>
         <span id="netStatus" class="status-badge status-online">● Online</span>
     </header>
 
     <div class="action-bar">
-        <button class="btn-scan" onclick="triggerScan()">📂 Scan Musik dari HP</button>
-        <button class="btn-clear" onclick="clearOfflineSongs()">🗑 Hapus Musik HP</button>
-        <!-- Input tersembunyi untuk memilih banyak file audio sekaligus dari HP -->
-        <input type="file" id="fileScanner" accept="audio/*" multiple style="display:none" onchange="handleFiles(this.files)">
+        <button class="btn-scan" onclick="triggerScan()">📂 Pilih / Scan Lagu HP</button>
+        <button class="btn-clear" onclick="clearOfflineSongs()">🗑 Hapus Daftar HP</button>
+        <!-- Tanpa atribut accept ketat agar tidak diblokir pemilih file Android -->
+        <input type="file" id="fileScanner" multiple style="display:none" onchange="handleFiles(this.files)">
     </div>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Cari lagu online atau dari HP..." onkeyup="renderSongs()">
+        <input type="text" id="searchInput" placeholder="Ketik judul lagu / artis..." onkeyup="if(event.key==='Enter') searchOnlineMusic()">
+        <button onclick="searchOnlineMusic()">Cari Online</button>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="setFilter('all', this)">Semua</div>
-        <div class="tab" onclick="setFilter('offline', this)">Musik HP (Offline)</div>
-        <div class="tab" onclick="setFilter('online', this)">Streaming (Online)</div>
+        <div class="tab active" id="tab-all" onclick="setFilter('all')">Semua</div>
+        <div class="tab" id="tab-offline" onclick="setFilter('offline')">Musik HP</div>
+        <div class="tab" id="tab-online" onclick="setFilter('online')">Streaming Online</div>
     </div>
 
     <div class="song-list" id="songList"></div>
@@ -134,44 +138,25 @@
         <input type="range" id="progressBar" value="0" min="0" max="100" onchange="seekAudio()">
     </div>
 
-    <audio id="audioPlayer" ontimeupdate="updateProgress()" onended="nextSong()"></audio>
+    <audio id="audioPlayer" playsinline ontimeupdate="updateProgress()" onended="nextSong()" onerror="handleAudioError()"></audio>
 
     <script>
-        // 1. Daftar Lagu Online Bawaan
-        const onlineSongs = [
-            {
-                id: 'on-1',
-                title: "SoundHelix Song 1",
-                artist: "T. Schürger (Online)",
-                cover: "https://unsplash.com",
-                src: "https://soundhelix.com",
-                type: "online"
-            },
-            {
-                id: 'on-2',
-                title: "SoundHelix Song 2",
-                artist: "Electronic Beats (Online)",
-                cover: "https://unsplash.com",
-                src: "https://soundhelix.com",
-                type: "online"
-            }
-        ];
-
+        let onlineSongs = [];
         let offlineSongs = [];
-        let allSongs = [...onlineSongs];
+        let allSongs = [];
         let currentFilter = 'all';
         let currentSongId = null;
         let isPlaying = false;
         const audio = document.getElementById("audioPlayer");
 
-        // 2. Deteksi Status Internet (Online / Offline)
+        // 1. Cek Status Koneksi
         function updateNetworkStatus() {
             const badge = document.getElementById("netStatus");
             if (navigator.onLine) {
                 badge.innerText = "● Online";
                 badge.className = "status-badge status-online";
             } else {
-                badge.innerText = "● Offline Mode";
+                badge.innerText = "● Offline";
                 badge.className = "status-badge status-offline";
             }
         }
@@ -179,9 +164,44 @@
         window.addEventListener('offline', updateNetworkStatus);
         updateNetworkStatus();
 
-        // 3. Database Lokal HP (IndexedDB) agar lagu hasil scan tersimpan permanen
+        // 2. Pencarian & Streaming Lagu Online (Server HTTPS Apple/iTunes)
+        async function searchOnlineMusic(defaultQuery = "indonesian pop") {
+            const inputVal = document.getElementById("searchInput").value.trim();
+            const query = inputVal || defaultQuery;
+            const listEl = document.getElementById("songList");
+
+            if (!navigator.onLine) {
+                alert("HP sedang offline. Menampilkan lagu dari memori HP.");
+                setFilter('offline');
+                return;
+            }
+
+            listEl.innerHTML = `<p style="text-align:center; color:#1db954; margin-top:20px;">Mencari lagu "${query}"...</p>`;
+
+            try {
+                const res = await fetch(`https://apple.com{encodeURIComponent(query)}&entity=song&limit=20`);
+                const data = await res.json();
+
+                onlineSongs = data.results
+                    .filter(item => item.previewUrl)
+                    .map(item => ({
+                        id: 'on-' + item.trackId,
+                        title: item.trackName,
+                        artist: item.artistName,
+                        cover: item.artworkUrl100.replace('100x100', '300x300'),
+                        src: item.previewUrl,
+                        type: "online"
+                    }));
+
+                mergeAndRender();
+            } catch (err) {
+                listEl.innerHTML = `<p style="text-align:center; color:#ff6b6b; margin-top:20px;">Gagal memuat streaming online. Periksa koneksi internet.</p>`;
+            }
+        }
+
+        // 3. Database Lokal HP (IndexedDB)
         let db;
-        const request = indexedDB.open("SpotifyOfflineDB", 1);
+        const request = indexedDB.open("MySpotifyAPK_DB", 1);
         request.onupgradeneeded = (e) => {
             db = e.target.result;
             db.createObjectStore("songs", { keyPath: "id" });
@@ -192,6 +212,7 @@
         };
 
         function loadSavedOfflineSongs() {
+            if (!db) return;
             const tx = db.transaction("songs", "readonly");
             const store = tx.objectStore("songs");
             const getAll = store.getAll();
@@ -199,34 +220,3 @@
                 offlineSongs = getAll.result.map(item => ({
                     id: item.id,
                     title: item.title,
-                    artist: "Memori HP (Offline)",
-                    cover: "https://unsplash.com",
-                    src: URL.createObjectURL(item.file),
-                    type: "offline"
-                }));
-                allSongs = [...offlineSongs, ...onlineSongs];
-                renderSongs();
-            };
-        }
-
-        // 4. Fitur Scan Musik dari HP
-        function triggerScan() {
-            document.getElementById("fileScanner").click();
-        }
-
-        function handleFiles(files) {
-            if (!files.length) return;
-            const tx = db.transaction("songs", "readwrite");
-            const store = tx.objectStore("songs");
-
-            Array.from(files).forEach((file, idx) => {
-                const cleanTitle = file.name.replace(/\.[^/.]+$/, "");
-                const songRecord = {
-                    id: 'off-' + Date.now() + '-' + idx,
-                    title: cleanTitle,
-                    file: file
-                };
-                store.put(songRecord);
-            });
-
-            tx.oncomplete = () => {
