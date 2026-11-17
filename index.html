@@ -1,134 +1,71 @@
-<!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>MusikKu - Full Song</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#000;color:#fff;display:flex;height:100vh;overflow:hidden}
-.sidebar{width:240px;background:#000;padding:20px 12px;display:flex;flex-direction:column;gap:8px}
-.logo{font-size:26px;font-weight:900;padding:0 12px 15px}.logo span{color:#1ed760}
-.menu{padding:10px 12px;border-radius:8px;display:flex;gap:15px;align-items:center;color:#b3b3b3;font-weight:700;cursor:pointer;font-size:14px}
-.menu.active{background:#282828;color:#fff}
-.lib{margin-top:15px;background:#121212;border-radius:10px;padding:15px;flex:1;overflow-y:auto}
-.lib h4{font-size:14px;margin-bottom:12px}
-.playlist-card{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
-.playlist-card:hover{background:#282828}
-.playlist-card img{width:48px;height:48px;border-radius:6px;object-fit:cover}
-.playlist-card b{font-size:13px;display:block}.playlist-card small{color:#b3b3b3;font-size:11px}
-.main{flex:1;background:linear-gradient(#222,#121212 40%);overflow-y:auto;padding:20px 25px 130px;border-radius:12px 0 0 0;margin:8px 8px 8px 0}
-.topbar{display:flex;gap:10px;align-items:center;position:sticky;top:0;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);padding:10px 0;z-index:10}
-.search-box{flex:1;max-width:400px;background:#242424;border-radius:30px;display:flex;align-items:center;padding:10px 15px;gap:10px}
-.search-box input{background:transparent;border:none;outline:none;color:#fff;width:100%;font-size:14px}
-.btn-login{background:#fff;color:#000;border:none;padding:10px 22px;border-radius:30px;font-weight:800;cursor:pointer}
-.hero{background:linear-gradient(135deg,#ff0000,#7a0000);border-radius:12px;padding:25px;margin:15px 0;display:flex;justify-content:space-between;align-items:center}
-.hero h1{font-size:28px;line-height:1.1}.hero p{font-size:13px;margin-top:6px;opacity:.9}
-.hero button{background:#fff;color:#000;border:none;padding:10px 20px;border-radius:30px;font-weight:800;margin-top:12px;cursor:pointer}
-.section-title{font-size:20px;font-weight:800;margin:20px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
-.card{background:#181818;padding:14px;border-radius:10px;cursor:pointer;position:relative}
-.card:hover{background:#282828}
-.card img{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;margin-bottom:10px}
-.card b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card small{color:#b3b3b3;font-size:12px}
-.play-btn{position:absolute;right:20px;top:45%;background:#1ed760;width:45px;height:45px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:18px;color:#000}
-.card:hover .play-btn{display:flex}
-.player{position:fixed;bottom:0;left:0;right:0;height:100px;background:#000;border-top:1px solid #222;display:flex;align-items:center;padding:0 15px;gap:15px;z-index:99}
-.player-left{display:flex;align-items:center;gap:12px;width:32%}
-.player-left img{width:56px;height:56px;border-radius:8px;object-fit:cover}
-.player-center{flex:1;text-align:center}
-.controls{display:flex;gap:18px;align-items:center;justify-content:center;font-size:20px}
-.controls .play-main{background:#fff;color:#000;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
-.full-badge{background:#ff0000;color:#fff;font-size:10px;padding:3px 7px;border-radius:10px;font-weight:800}
-.yt-wrap{margin-top:8px;background:#111;border-radius:10px;overflow:hidden}
-.yt-wrap iframe{width:100%;height:180px;border:none;display:none}
-.yt-wrap.show iframe{display:block}
-@media(max-width:768px){.sidebar{display:none}.main{margin:0;border-radius:0;padding:15px 15px 130px}.player-left{width:60%}.player-right{display:none}}
-</style></head><body>
+name: Build APK MusikKu
 
-<div class="sidebar">
-<div class="logo">🎵 Musik<span>Ku</span></div>
-<div class="menu active">🏠 Beranda</div>
-<div class="menu" onclick="document.getElementById('q').focus()">🔍 Cari</div>
-<div class="menu">📚 Koleksi Kamu</div>
-<div class="lib"><h4>🔥 Playlist Full</h4>
-<div class="playlist-card" onclick="cari('Mahalini')"><img src="https://via.placeholder.com/48/ff0000/fff?text=M"><div><b>Mahalini Full</b><small>Playlist • FULL</small></div></div>
-<div class="playlist-card" onclick="cari('Juicy Luicy')"><img src="https://via.placeholder.com/48/ff6b6b/fff?text=J"><div><b>Galau Full</b><small>Playlist • FULL</small></div></div>
-<div class="playlist-card" onclick="cari('Hindia')"><img src="https://via.placeholder.com/48/4ecdc4/fff?text=H"><div><b>Indie Full</b><small>Playlist • FULL</small></div></div>
-<div class="playlist-card" onclick="cari('Bernadya')"><img src="https://via.placeholder.com/48/a78bfa/fff?text=B"><div><b>Bernadya Full</b><small>Playlist • FULL</small></div></div>
-<div class="playlist-card" onclick="cari('Nadin Amizah')"><img src="https://via.placeholder.com/48/f472b6/fff?text=N"><div><b>Nadin Full</b><small>Playlist • FULL</small></div></div>
-<div class="playlist-card" onclick="cari('Top Hits Indonesia 2026')"><img src="https://via.placeholder.com/48/1ed760/000?text=TOP"><div><b>Top Hits 2026</b><small>Playlist • FULL</small></div></div>
-</div>
-<p style="font-size:11px;color:#666;padding:10px">Full via YouTube • Gratis</p>
-</div>
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-<div class="main">
-<div class="topbar">
-<div class="search-box">🔍 <input id="q" placeholder="Mau dengerin apa? - FULL LAGU" value="Mahalini" onkeyup="if(event.key==='Enter')cari()"></div>
-<button class="btn-login" onclick="cari()">CARI</button>
-</div>
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil Kodingan
+        uses: actions/checkout@v5
 
-<div class="hero"><div><p>🔴 YOUTUBE FULL VERSION</p><h1>MusikKu<br>FULL LAGU!</h1><p>Ga ada lagi yang 30 detik! Semua lagu muter sampe abis, 3-4 menit full.</p><button onclick="cari('Top Hits Indonesia 2026')">▶ Putar Full Sekarang</button></div><div style="font-size:70px">▶️</div></div>
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-<div class="yt-wrap" id="ytWrap"><div style="padding:10px;font-size:12px;color:#b3b3b3;display:flex;justify-content:space-between"><span>📺 Lagi Muter di YouTube (FULL) - Kalo mau liat videonya klik tombol dibawah</span><button onclick="toggleVideo()" style="background:#ff0000;color:#fff;border:none;padding:5px 10px;border-radius:20px;font-weight:700;cursor:pointer">LIAT VIDEO</button></div><iframe id="ytFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-<h3 class="section-title">🔥 Lagi Trending - Klik = Langsung FULL <span class="full-badge">FULL SONG</span></h3>
-<div id="list" class="grid"><p style="color:#b3b3b3">Lagi loading...</p></div>
+      - name: Bikin Project Android
+        run: |
+          mkdir -p android-app/app/src/main/assets
+          mkdir -p android-app/app/src/main/java/com/faizlambi/musikku
+          cp index.html android-app/app/src/main/assets/
+          echo "include ':app'" > android-app/settings.gradle
+          cat > android-app/build.gradle <<'EOF'
+          buildscript { repositories { google() mavenCentral() } dependencies { classpath 'com.android.application:8.1.4' } }
+          allprojects { repositories { google() mavenCentral() } }
+          EOF
+          cat > android-app/app/build.gradle <<'EOF'
+          apply plugin: 'com.android.application'
+          android { namespace 'com.faizlambi.musikku' compileSdk 34 defaultConfig { applicationId 'com.faizlambi.musikku' minSdk 24 targetSdk 34 versionCode 1 versionName '1.0' } buildTypes { release { minifyEnabled false } } }
+          EOF
+          cat > android-app/app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+          <uses-permission android:name="android.permission.INTERNET" />
+          <application android:label="MusikKu" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:usesCleartextTraffic="true">
+          <activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter></activity>
+          </application></manifest>
+          EOF
+          cat > android-app/app/src/main/java/com/faizlambi/musikku/MainActivity.java <<'EOF'
+          package com.faizlambi.musikku;
+          import android.app.Activity; import android.os.Bundle; import android.webkit.WebSettings; import android.webkit.WebView; import android.webkit.WebViewClient;
+          public class MainActivity extends Activity {
+            private WebView wv;
+            protected void onCreate(Bundle b){ super.onCreate(b); wv=new WebView(this); setContentView(wv); WebSettings s=wv.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setMediaPlaybackRequiresUserGesture(false); wv.setWebViewClient(new WebViewClient()); wv.loadUrl("file:///android_asset/index.html"); }
+            public void onBackPressed(){ if(wv.canGoBack()) wv.goBack(); else super.onBackPressed(); }
+          }
+          EOF
 
-<h3 class="section-title">🎤 Artis Pilihan - FULL</h3>
-<div class="grid">
-<div class="card" onclick="cari('Mahalini')"><img src="https://via.placeholder.com/300/ff0000/fff?text=Mahalini"><b>Mahalini</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-<div class="card" onclick="cari('Rizky Febian')"><img src="https://via.placeholder.com/300/ff6b6b/fff?text=Rizky"><b>Rizky Febian</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-<div class="card" onclick="cari('Hindia')"><img src="https://via.placeholder.com/300/4ecdc4/fff?text=Hindia"><b>Hindia</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-<div class="card" onclick="cari('Juicy Luicy')"><img src="https://via.placeholder.com/300/ffe66d/000?text=Juicy"><b>Juicy Luicy</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-<div class="card" onclick="cari('Bernadya')"><img src="https://via.placeholder.com/300/a78bfa/fff?text=Bernadya"><b>Bernadya</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-<div class="card" onclick="cari('Nadin Amizah')"><img src="https://via.placeholder.com/300/f472b6/fff?text=Nadin"><b>Nadin Amizah</b><small>Artis • FULL</small><div class="play-btn">▶</div></div>
-</div>
-</div>
+      - name: Download Gradle
+        run: |
+          cd android-app
+          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O gradle.zip
+          unzip -q gradle.zip
+          ls
 
-<div class="player">
-<div class="player-left"><img id="pImg" src="https://via.placeholder.com/56/ff0000/fff?text=♪"><div><b id="pTitle" style="font-size:14px">Pilih lagu dulu</b><br><small id="pArtist" style="color:#b3b3b3">MusikKu • FULL</small></div><span style="margin-left:10px">♡</span></div>
-<div class="player-center"><div class="controls"><span onclick="prev()" style="cursor:pointer">⏮</span><div class="play-main" id="playBtn" onclick="togglePlay()">▶</div><span onclick="next()" style="cursor:pointer">⏭</span><span style="font-size:14px">🔀</span><span style="font-size:14px">🔁</span></div><div style="font-size:11px;color:#b3b3b3;margin-top:6px"><span id="status">Klik lagu -> Langsung muter FULL sampe abis 🔴</span></div></div>
-<div class="player-right" style="width:20%;text-align:right"><span style="background:#ff0000;padding:4px 8px;border-radius:10px;font-size:11px;font-weight:800">FULL SONG</span></div>
-</div>
+      - name: Build APK
+        run: |
+          cd android-app
+          ./gradle-8.5/bin/gradle assembleDebug --stacktrace
 
-<script>
-let songs=[],idx=0,isPlaying=false,videoShown=false;
-async function cari(kata){
- let q=kata||document.getElementById('q').value||'Mahalini';
- document.getElementById('q').value=q;
- document.getElementById('list').innerHTML='<p style="color:#b3b3b3">Lagi nyari "'+q+'"...</p>';
- try{
-  let r=await fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&media=music&limit=24&country=ID');
-  let d=await r.json(); songs=d.results;
-  let h='';
-  songs.forEach((s,i)=>{ h+=`<div class="card" onclick="play(${i})"><img src="${s.artworkUrl100.replace('100x100','300x300')}"><b>${s.trackName}</b><small>${s.artistName} • FULL</small><div class="play-btn">▶</div></div>`; });
-  document.getElementById('list').innerHTML=h||'<p>Ga ketemu, coba kata lain</p>';
- }catch(e){ document.getElementById('list').innerHTML='<p>Internet mati, klik CARI lagi</p>'; }
-}
-function play(i){
- idx=i; let s=songs[i]; if(!s) return;
- document.getElementById('pImg').src=s.artworkUrl100.replace('100x100','300x300');
- document.getElementById('pTitle').innerText=s.trackName;
- document.getElementById('pArtist').innerText=s.artistName+' • FULL';
- document.getElementById('status').innerText='🔴 LAGI MUTER FULL: '+s.trackName+' - '+s.artistName;
- // INI KUNCINYA: YOUTUBE SEARCH = FULL LAGU
- let query = encodeURIComponent(s.trackName+' '+s.artistName+' official audio');
- document.getElementById('ytFrame').src='https://www.youtube.com/embed?listType=search&list='+query+'&autoplay=1&rel=0';
- isPlaying=true; document.getElementById('playBtn').innerText='⏸';
- // scroll ke player youtube biar keliatan lagi muter
- document.getElementById('ytWrap').scrollIntoView({behavior:'smooth'});
-}
-function togglePlay(){
- let f=document.getElementById('ytFrame');
- if(!f.src) return play(0);
- if(isPlaying){ f.src=f.src.replace('autoplay=1','autoplay=0'); document.getElementById('playBtn').innerText='▶'; document.getElementById('status').innerText='⏸ Dijeda'; isPlaying=false; }
- else{ f.src=f.src.replace('autoplay=0','autoplay=1'); document.getElementById('playBtn').innerText='⏸'; document.getElementById('status').innerText='🔴 Lagi Muter FULL'; isPlaying=true; }
-}
-function toggleVideo(){
- videoShown=!videoShown;
- document.getElementById('ytWrap').classList.toggle('show',videoShown);
- document.getElementById('ytFrame').style.display=videoShown?'block':'none';
-}
-function next(){ if(idx<songs.length-1) play(idx+1); else play(0); }
-function prev(){ if(idx>0) play(idx-1); }
-cari('Mahalini');
-</script>
-</body></html>
+      - name: Simpan APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusikKu-APK
+          path: android-app/app/build/outputs/apk/debug/app-debug.apk
