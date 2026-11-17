@@ -18,14 +18,15 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Bikin Project Android Simple
         run: |
           mkdir -p android-app/app/src/main/assets
           mkdir -p android-app/app/src/main/java/com/faizlambi/musikku
-          # Copy semua file website lu ke dalam APK
-          cp index.html android-app/app/src/main/assets/ || echo "index.html ga ketemu"
-          cp manifest.json android-app/app/src/main/assets/ || echo "manifest ga ada, skip"
-          # Buat setting Gradle
+          cp index.html android-app/app/src/main/assets/
+          cp manifest.json android-app/app/src/main/assets/ || echo "manifest skip"
           echo "include ':app'" > android-app/settings.gradle
           cat > android-app/build.gradle <<'EOF'
           buildscript { repositories { google() mavenCentral() } dependencies { classpath 'com.android.application:8.1.4' } }
@@ -51,14 +52,12 @@ jobs:
             public void onBackPressed(){ if(wv.canGoBack()) wv.goBack(); else super.onBackPressed(); }
           }
           EOF
-          ls -R android-app
 
       - name: Build APK
         run: |
           cd android-app
-          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O gradle.zip
-          unzip -q gradle.zip
-          ./gradle-8.5/bin/gradle assembleDebug --stacktrace
+          chmod +x gradlew || true
+          gradle assembleDebug || ./gradlew assembleDebug
 
       - name: Simpan APK
         uses: actions/upload-artifact@v4
