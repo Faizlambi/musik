@@ -1,12 +1,9 @@
 {
-  "name": "spotify-clone",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "mkdir -p www && cp index.html www/"
-  },
-  "dependencies": {
-    "@capacitor/android": "^6.0.0",
-    "@capacitor/cli": "^6.0.0",
-    "@capacitor/core": "^6.0.0"
-  }
+  "name": "MusikKu",
+  "short_name": "MusikKu",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#1ed760",
+  "start_url": "./index.html",
+  "icons": [{"src": "https://via.placeholder.com/512/1ed760/000?text=M","sizes": "512x512","type": "image/png"}]
 }
