@@ -1,222 +1,131 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Spotify APK</title>
-    <meta name="theme-color" content="#121212">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #121212; color: white; padding-bottom: 130px; }
-        
-        header {
-            background: linear-gradient(to bottom, #1db954, #121212);
-            padding: 25px 20px 15px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        header h1 { font-size: 22px; }
-        .status-badge {
-            font-size: 11px; padding: 4px 10px; border-radius: 12px;
-            background: rgba(0,0,0,0.5); font-weight: bold;
-        }
-        .status-online { color: #1db954; }
-        .status-offline { color: #ff5555; }
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>MusikKu - Spotify Versi Kamu</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Circular',Arial,sans-serif}
+body{background:#000;color:#fff;display:flex;height:100vh;overflow:hidden}
+a{color:#b3b3b3;text-decoration:none}
+/* SIDEBAR KIRI */
+.sidebar{width:240px;background:#000;padding:20px 12px;display:flex;flex-direction:column;gap:8px}
+.logo{font-size:26px;font-weight:900;padding:0 12px 15px}.logo span{color:#1ed760}
+.menu{padding:10px 12px;border-radius:8px;display:flex;gap:15px;align-items:center;color:#b3b3b3;font-weight:700;cursor:pointer;font-size:14px}
+.menu.active{background:#282828;color:#fff}
+.menu:hover{color:#fff}
+.lib{margin-top:15px;background:#121212;border-radius:10px;padding:15px;flex:1;overflow-y:auto}
+.lib h4{font-size:14px;margin-bottom:12px}
+.playlist-card{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+.playlist-card:hover{background:#282828}
+.playlist-card img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.playlist-card b{font-size:13px;display:block}.playlist-card small{color:#b3b3b3;font-size:11px}
+/* TENGAH */
+.main{flex:1;background:linear-gradient(#222,#121212 40%);overflow-y:auto;padding:20px 25px 130px;border-radius:12px 0 0 0;margin:8px 8px 8px 0}
+.topbar{display:flex;gap:10px;align-items:center;position:sticky;top:0;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);padding:10px 0;z-index:10}
+.search-box{flex:1;max-width:400px;background:#242424;border:1px solid transparent;border-radius:30px;display:flex;align-items:center;padding:10px 15px;gap:10px}
+.search-box input{background:transparent;border:none;outline:none;color:#fff;width:100%;font-size:14px}
+.search-box:focus-within{border-color:#fff}
+.btn-login{background:#fff;color:#000;border:none;padding:10px 22px;border-radius:30px;font-weight:800;cursor:pointer}
+.hero{background:linear-gradient(135deg,#1ed760,#14833b);border-radius:12px;padding:25px;margin:15px 0;display:flex;justify-content:space-between;align-items:center}
+.hero h1{font-size:28px;line-height:1.1}.hero p{font-size:13px;margin-top:6px;opacity:.9}
+.hero button{background:#000;color:#fff;border:none;padding:10px 20px;border-radius:30px;font-weight:800;margin-top:12px;cursor:pointer}
+.section-title{font-size:20px;font-weight:800;margin:20px 0 12px;display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.card{background:#181818;padding:14px;border-radius:10px;cursor:pointer;transition:.2s;position:relative}
+.card:hover{background:#282828}
+.card img{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;margin-bottom:10px}
+.card b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card small{color:#b3b3b3;font-size:12px}
+.play-btn{position:absolute;right:20px;top:45%;background:#1ed760;width:45px;height:45px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:18px;color:#000;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.card:hover .play-btn{display:flex}
+/* PLAYER BAWAH */
+.player{position:fixed;bottom:0;left:0;right:0;height:90px;background:#000;border-top:1px solid #222;display:flex;align-items:center;padding:0 15px;gap:15px;z-index:99}
+.player-left{display:flex;align-items:center;gap:12px;width:30%}
+.player-left img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.player-center{flex:1;text-align:center}
+.controls{display:flex;gap:18px;align-items:center;justify-content:center;font-size:20px}
+.controls .play-main{background:#fff;color:#000;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
+.progress{display:flex;gap:8px;align-items:center;font-size:11px;color:#b3b3b3;margin-top:6px}
+.progress input{flex:1;accent-color:#1ed760}
+.player-right{width:25%;display:flex;justify-content:flex-end;gap:10px;align-items:center;font-size:16px}
+@media(max-width:768px){.sidebar{display:none}.player-left{width:55%}.player-right{display:none}.player-center{width:45%}.main{margin:0;border-radius:0;padding:15px 15px 130px}}
+</style></head><body>
 
-        .action-bar {
-            padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap;
-        }
-        .btn-scan {
-            background: #1db954; color: black; border: none; padding: 11px 16px;
-            border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer;
-        }
-        .btn-clear {
-            background: #282828; color: #ff6b6b; border: none; padding: 11px 14px;
-            border-radius: 20px; font-size: 12px; cursor: pointer;
-        }
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div class="logo">🎵 Musik<span>Ku</span></div>
+<div class="menu active" onclick="showHome()">🏠 Beranda</div>
+<div class="menu" onclick="document.getElementById('q').focus()">🔍 Cari</div>
+<div class="menu">📚 Koleksi Kamu</div>
+<div class="lib"><h4>Playlist Kamu</h4>
+<div id="myPlaylist"></div>
+<div class="playlist-card" onclick="cari('Mahalini')"><img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/1d/8d/8d/1d8d8d8d-8d8d-8d8d-8d8d-8d8d8d8d8d8d/100x100bb.jpg" onerror="this.src='https://via.placeholder.com/48/1ed760/000?text=M'"><div><b>Mahalini Hits</b><small>Playlist • MusikKu</small></div></div>
+<div class="playlist-card" onclick="cari('Juicy Luicy')"><img src="https://via.placeholder.com/48/ff6b6b/fff?text=J"><div><b>Galau 2026</b><small>Playlist • MusikKu</small></div></div>
+<div class="playlist-card" onclick="cari('Hindia')"><img src="https://via.placeholder.com/48/4ecdc4/fff?text=H"><div><b>Indie Santai</b><small>Playlist • MusikKu</small></div></div>
+</div>
+<p style="font-size:11px;color:#666;padding:10px">Made by Faizlambi • Gratis</p>
+</div>
 
-        .search-box { padding: 5px 20px 12px; display: flex; gap: 8px; }
-        .search-box input {
-            flex: 1; padding: 12px 15px; border-radius: 25px; border: none;
-            background: #282828; color: white; font-size: 14px; outline: none;
-        }
-        .search-box button {
-            background: #1db954; color: black; border: none; padding: 0 16px;
-            border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer;
-        }
+<!-- TENGAH -->
+<div class="main">
+<div class="topbar">
+<div class="search-box">🔍 <input id="q" placeholder="Mau dengerin apa?" value="Mahalini" onkeyup="if(event.key==='Enter')cari()"></div>
+<button class="btn-login" onclick="cari()">CARI</button>
+</div>
 
-        .tabs { display: flex; padding: 0 20px 12px; gap: 8px; }
-        .tab {
-            padding: 7px 14px; border-radius: 15px; background: #282828;
-            font-size: 12px; cursor: pointer; color: #b3b3b3;
-        }
-        .tab.active { background: #1db954; color: black; font-weight: bold; }
+<div class="hero"><div><p>Playlist Pilihan Untuk Kamu</p><h1>Selamat Datang<br>di MusikKu!</h1><p>Dengerin jutaan lagu gratis, tanpa iklan, tanpa login.</p><button onclick="cari('Top Hits Indonesia')">▶ Putar Sekarang</button></div><div style="font-size:70px">🎧</div></div>
 
-        .song-list { padding: 0 20px; }
-        .song-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 10px; border-radius: 8px; margin-bottom: 8px; cursor: pointer;
-            background: #181818;
-        }
-        .song-item.active { background: #282828; border-left: 3px solid #1db954; }
-        .song-left { display: flex; align-items: center; overflow: hidden; }
-        .song-left img { width: 48px; height: 48px; border-radius: 6px; margin-right: 12px; object-fit: cover; flex-shrink: 0; }
-        .song-info { overflow: hidden; }
-        .song-info h4 { font-size: 14px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-info p { font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-item.active .song-info h4 { color: #1db954; }
-        .tag-type {
-            font-size: 10px; padding: 3px 7px; border-radius: 4px;
-            background: #333; color: #ccc; flex-shrink: 0; margin-left: 8px;
-        }
+<h3 class="section-title">🔥 Lagi Trending di Indonesia <span style="font-size:12px;color:#b3b3b3">Lihat Semua</span></h3>
+<div id="list" class="grid"><p style="color:#b3b3b3">Lagi loading lagu...</p></div>
 
-        .player-bar {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #181818; border-top: 1px solid #282828;
-            padding: 12px 20px; display: flex; flex-direction: column; gap: 8px;
-        }
-        .player-top { display: flex; justify-content: space-between; align-items: center; }
-        .now-playing { display: flex; align-items: center; gap: 10px; max-width: 60%; }
-        .now-playing img { width: 42px; height: 42px; border-radius: 4px; object-fit: cover; }
-        .now-playing div { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .now-playing h5 { font-size: 14px; overflow: hidden; text-overflow: ellipsis; }
-        .now-playing span { font-size: 11px; color: #b3b3b3; }
+<h3 class="section-title">🎤 Artis Pilihan</h3>
+<div class="grid">
+<div class="card" onclick="cari('Mahalini')"><img src="https://via.placeholder.com/300/1ed760/000?text=Mahalini"><b>Mahalini</b><small>Artis</small><div class="play-btn">▶</div></div>
+<div class="card" onclick="cari('Rizky Febian')"><img src="https://via.placeholder.com/300/ff6b6b/fff?text=Rizky"><b>Rizky Febian</b><small>Artis</small><div class="play-btn">▶</div></div>
+<div class="card" onclick="cari('Hindia')"><img src="https://via.placeholder.com/300/4ecdc4/fff?text=Hindia"><b>Hindia</b><small>Artis</small><div class="play-btn">▶</div></div>
+<div class="card" onclick="cari('Juicy Luicy')"><img src="https://via.placeholder.com/300/ffe66d/000?text=Juicy"><b>Juicy Luicy</b><small>Artis</small><div class="play-btn">▶</div></div>
+<div class="card" onclick="cari('Bernadya')"><img src="https://via.placeholder.com/300/a78bfa/fff?text=Bernadya"><b>Bernadya</b><small>Artis</small><div class="play-btn">▶</div></div>
+<div class="card" onclick="cari('Nadin Amizah')"><img src="https://via.placeholder.com/300/f472b6/fff?text=Nadin"><b>Nadin Amizah</b><small>Artis</small><div class="play-btn">▶</div></div>
+</div>
+</div>
 
-        .controls { display: flex; align-items: center; gap: 14px; }
-        .controls button { background: none; border: none; color: white; font-size: 18px; cursor: pointer; }
-        .controls .play-btn {
-            background: #1db954; color: black; width: 40px; height: 40px;
-            border-radius: 50%; font-weight: bold; display: flex; align-items: center; justify-content: center;
-        }
-        input[type="range"] { width: 100%; accent-color: #1db954; height: 4px; }
-    </style>
-</head>
-<body>
+<!-- PLAYER -->
+<div class="player">
+<div class="player-left"><img id="pImg" src="https://via.placeholder.com/56/1ed760/000?text=♪"><div><b id="pTitle" style="font-size:14px">Pilih lagu dulu</b><br><small id="pArtist" style="color:#b3b3b3">MusikKu</small></div><span style="margin-left:10px">♡</span></div>
+<div class="player-center"><div class="controls"><span onclick="prev()">⏮</span><div class="play-main" id="playBtn" onclick="togglePlay()">▶</div><span onclick="next()">⏭</span><span style="font-size:14px">🔀</span><span style="font-size:14px">🔁</span></div>
+<div class="progress"><span id="cur">0:00</span><input type="range" id="prog" value="0" max="100" oninput="seek(this.value)"><span id="dur">0:30</span></div></div>
+<div class="player-right"><span>🎙️</span><span>📋</span><span>🔊</span><input type="range" style="width:80px;accent-color:#1ed760" oninput="setVol(this.value)"><span>⛶</span></div>
+</div>
+<audio id="audio"></audio>
 
-    <header>
-        <div>
-            <h1>My Spotify</h1>
-            <p style="font-size: 12px; color: #ddd;">Online Streaming & Offline HP</p>
-        </div>
-        <span id="netStatus" class="status-badge status-online">● Online</span>
-    </header>
-
-    <div class="action-bar">
-        <button class="btn-scan" onclick="triggerScan()">📂 Pilih / Scan Lagu HP</button>
-        <button class="btn-clear" onclick="clearOfflineSongs()">🗑 Hapus Daftar HP</button>
-        <!-- Tanpa atribut accept ketat agar tidak diblokir pemilih file Android -->
-        <input type="file" id="fileScanner" multiple style="display:none" onchange="handleFiles(this.files)">
-    </div>
-
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Ketik judul lagu / artis..." onkeyup="if(event.key==='Enter') searchOnlineMusic()">
-        <button onclick="searchOnlineMusic()">Cari Online</button>
-    </div>
-
-    <div class="tabs">
-        <div class="tab active" id="tab-all" onclick="setFilter('all')">Semua</div>
-        <div class="tab" id="tab-offline" onclick="setFilter('offline')">Musik HP</div>
-        <div class="tab" id="tab-online" onclick="setFilter('online')">Streaming Online</div>
-    </div>
-
-    <div class="song-list" id="songList"></div>
-
-    <div class="player-bar">
-        <div class="player-top">
-            <div class="now-playing">
-                <img id="coverImg" src="https://unsplash.com" alt="Cover">
-                <div>
-                    <h5 id="trackTitle">Pilih Lagu</h5>
-                    <span id="trackArtist">Siap memutar musik</span>
-                </div>
-            </div>
-            <div class="controls">
-                <button onclick="prevSong()">⏮</button>
-                <button class="play-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
-                <button onclick="nextSong()">⏭</button>
-            </div>
-        </div>
-        <input type="range" id="progressBar" value="0" min="0" max="100" onchange="seekAudio()">
-    </div>
-
-    <audio id="audioPlayer" playsinline ontimeupdate="updateProgress()" onended="nextSong()" onerror="handleAudioError()"></audio>
-
-    <script>
-        let onlineSongs = [];
-        let offlineSongs = [];
-        let allSongs = [];
-        let currentFilter = 'all';
-        let currentSongId = null;
-        let isPlaying = false;
-        const audio = document.getElementById("audioPlayer");
-
-        // 1. Cek Status Koneksi
-        function updateNetworkStatus() {
-            const badge = document.getElementById("netStatus");
-            if (navigator.onLine) {
-                badge.innerText = "● Online";
-                badge.className = "status-badge status-online";
-            } else {
-                badge.innerText = "● Offline";
-                badge.className = "status-badge status-offline";
-            }
-        }
-        window.addEventListener('online', updateNetworkStatus);
-        window.addEventListener('offline', updateNetworkStatus);
-        updateNetworkStatus();
-
-        // 2. Pencarian & Streaming Lagu Online (Server HTTPS Apple/iTunes)
-        async function searchOnlineMusic(defaultQuery = "indonesian pop") {
-            const inputVal = document.getElementById("searchInput").value.trim();
-            const query = inputVal || defaultQuery;
-            const listEl = document.getElementById("songList");
-
-            if (!navigator.onLine) {
-                alert("HP sedang offline. Menampilkan lagu dari memori HP.");
-                setFilter('offline');
-                return;
-            }
-
-            listEl.innerHTML = `<p style="text-align:center; color:#1db954; margin-top:20px;">Mencari lagu "${query}"...</p>`;
-
-            try {
-                const res = await fetch(`https://apple.com{encodeURIComponent(query)}&entity=song&limit=20`);
-                const data = await res.json();
-
-                onlineSongs = data.results
-                    .filter(item => item.previewUrl)
-                    .map(item => ({
-                        id: 'on-' + item.trackId,
-                        title: item.trackName,
-                        artist: item.artistName,
-                        cover: item.artworkUrl100.replace('100x100', '300x300'),
-                        src: item.previewUrl,
-                        type: "online"
-                    }));
-
-                mergeAndRender();
-            } catch (err) {
-                listEl.innerHTML = `<p style="text-align:center; color:#ff6b6b; margin-top:20px;">Gagal memuat streaming online. Periksa koneksi internet.</p>`;
-            }
-        }
-
-        // 3. Database Lokal HP (IndexedDB)
-        let db;
-        const request = indexedDB.open("MySpotifyAPK_DB", 1);
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            db.createObjectStore("songs", { keyPath: "id" });
-        };
-        request.onsuccess = (e) => {
-            db = e.target.result;
-            loadSavedOfflineSongs();
-        };
-
-        function loadSavedOfflineSongs() {
-            if (!db) return;
-            const tx = db.transaction("songs", "readonly");
-            const store = tx.objectStore("songs");
-            const getAll = store.getAll();
-            getAll.onsuccess = () => {
-                offlineSongs = getAll.result.map(item => ({
-                    id: item.id,
-                    title: item.title,
+<script>
+let songs=[],idx=0;
+let audio=document.getElementById('audio');
+async function cari(kata){
+ let q=kata||document.getElementById('q').value||'Mahalini';
+ document.getElementById('q').value=q;
+ document.getElementById('list').innerHTML='<p style="color:#b3b3b3">Lagi nyari "'+q+'"...</p>';
+ try{
+  let r=await fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&media=music&limit=24&country=ID');
+  let d=await r.json();
+  songs=d.results;
+  let h='';
+  songs.forEach((s,i)=>{ h+=`<div class="card" onclick="play(${i})"><img src="${s.artworkUrl100.replace('100x100','300x300')}"><b>${s.trackName}</b><small>${s.artistName}</small><div class="play-btn">▶</div></div>`; });
+  document.getElementById('list').innerHTML=h||'<p>Ga ketemu, coba kata lain</p>';
+ }catch(e){ document.getElementById('list').innerHTML='<p>Internet lu mati, coba klik CARI lagi</p>'; }
+}
+function play(i){ idx=i; let s=songs[i]; if(!s) return;
+ document.getElementById('pImg').src=s.artworkUrl100.replace('100x100','300x300');
+ document.getElementById('pTitle').innerText=s.trackName;
+ document.getElementById('pArtist').innerText=s.artistName;
+ audio.src=s.previewUrl; audio.play(); document.getElementById('playBtn').innerText='⏸';
+}
+function togglePlay(){ if(!audio.src) return play(0); if(audio.paused){audio.play();document.getElementById('playBtn').innerText='⏸'}else{audio.pause();document.getElementById('playBtn').innerText='▶'} }
+function next(){ if(idx<songs.length-1) play(idx+1); else play(0); }
+function prev(){ if(idx>0) play(idx-1); }
+function seek(v){ audio.currentTime = (v/100)*audio.duration; }
+function setVol(v){ audio.volume=v/100; }
+audio.ontimeupdate=()=>{ if(audio.duration){ document.getElementById('prog').value=(audio.currentTime/audio.duration)*100; document.getElementById('cur').innerText='0:'+Math.floor(audio.currentTime).toString().padStart(2,'0'); } };
+audio.onended=()=>next();
+function showHome(){ cari('Top Hits Indonesia'); }
+cari('Mahalini');
+</script>
+</body></html>
