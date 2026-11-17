@@ -18,27 +18,50 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Bikin APK dari Website
+      - name: Bikin Project Android Simple
         run: |
-          npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init MusikKu com.faizlambi.musikku --web-dir=. --npm-client=npm
-          npx cap add android
-          npx cap sync android
+          mkdir -p android-app/app/src/main/assets
+          mkdir -p android-app/app/src/main/java/com/faizlambi/musikku
+          # Copy semua file website lu ke dalam APK
+          cp index.html android-app/app/src/main/assets/ || echo "index.html ga ketemu"
+          cp manifest.json android-app/app/src/main/assets/ || echo "manifest ga ada, skip"
+          # Buat setting Gradle
+          echo "include ':app'" > android-app/settings.gradle
+          cat > android-app/build.gradle <<'EOF'
+          buildscript { repositories { google() mavenCentral() } dependencies { classpath 'com.android.application:8.1.4' } }
+          allprojects { repositories { google() mavenCentral() } }
+          EOF
+          cat > android-app/app/build.gradle <<'EOF'
+          apply plugin: 'com.android.application'
+          android { namespace 'com.faizlambi.musikku' compileSdk 34 defaultConfig { applicationId 'com.faizlambi.musikku' minSdk 24 targetSdk 34 versionCode 1 versionName '1.0' } buildTypes { release { minifyEnabled false } } }
+          EOF
+          cat > android-app/app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+          <uses-permission android:name="android.permission.INTERNET" />
+          <application android:label="MusikKu" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:usesCleartextTraffic="true">
+          <activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter></activity>
+          </application></manifest>
+          EOF
+          cat > android-app/app/src/main/java/com/faizlambi/musikku/MainActivity.java <<'EOF'
+          package com.faizlambi.musikku;
+          import android.app.Activity; import android.os.Bundle; import android.webkit.WebSettings; import android.webkit.WebView; import android.webkit.WebViewClient;
+          public class MainActivity extends Activity {
+            private WebView wv;
+            protected void onCreate(Bundle b){ super.onCreate(b); wv=new WebView(this); setContentView(wv); WebSettings s=wv.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setMediaPlaybackRequiresUserGesture(false); wv.setWebViewClient(new WebViewClient()); wv.loadUrl("file:///android_asset/index.html"); }
+            public void onBackPressed(){ if(wv.canGoBack()) wv.goBack(); else super.onBackPressed(); }
+          }
+          EOF
+          ls -R android-app
 
       - name: Build APK
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          cd android-app
+          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O gradle.zip
+          unzip -q gradle.zip
+          ./gradle-8.5/bin/gradle assembleDebug --stacktrace
 
       - name: Simpan APK
         uses: actions/upload-artifact@v4
         with:
           name: MusikKu-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: android-app/app/build/outputs/apk/debug/app-debug.apk
